@@ -1,0 +1,69 @@
+
+# Module 3 HiveQL
+
+- SELECT
+SELECT * FROM sales_nocomma
+
+SELECT * FROM sales_nocomma limit 10
+
+SELECT * FROM sales_comma
+
+ALTER TABLE sales_comma SET SERDE 'com.bizo.hive.serde.csv.CSVSerde'
+
+SELECT * FROM sales_all_years limit 10
+
+select * -- all columns from table
+from sales_all_years --table to pull from
+limit 100 --only return the top 100 rows
+
+
+-- alias 
+select 
+    s.orderdate,   
+    s.saleamount,
+    s.rowid
+from 
+    sales_all_years s
+limit 100;
+
+
+-- Ex
+select sum(saleamount) as sales,city
+from    sales_all_years
+group by city
+order by city
+limit 100
+
+-- WHERE
+select  *
+from    sales_all_years
+where   yr=2009
+limit   1000;
+
+-- remove the header row with a second where clause
+select  *
+from    sales_all_years
+where   yr = 2009
+and     lower(rowid) != 'rowid'
+limit   1000;
+
+-- Ex: WHERE
+select  *
+from    sales_all_years
+where   orderdate between '2010-01-01' and '2010-12-31'
+
+-- Ex: WHERE
+Ex: start by finding all the product sales for 2009
+select 
+    productcategory,
+    productsubcategory,
+    productkey,
+    sum(saleamount) as TotalSales
+from sales_all_years
+where
+    Yr=2009
+group by 
+    productcategory, 
+    productsubcategory, 
+    productkey
+limit 1000;

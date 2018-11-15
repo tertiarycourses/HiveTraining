@@ -1,0 +1,110 @@
+# Module 4 Aggregation
+
+
+-- monthly sales figures
+select
+    ordermonthyear as OrderMonth,
+    count(1) as OrderCount, --if every row represents one order we just count 1
+    sum(s.saleamount) as TotalSales,
+    avg(s.saleamount) as AvgSales,
+    min(s.saleamount) as MinSales,
+    max(s.saleamount) as MaxSales
+    
+from 
+    sales_all_years s
+where
+    lower(ordermonthyear) != 'ordermonthyear'
+group by
+    ordermonthyear
+order by
+    ordermonthyear desc
+
+
+ -- Ex: break it down further by category by month
+select
+    ordermonthyear as OrderMonth,
+    productcategory as Category,
+    count(1) as OrderCount, --if every row represents one order we just count 1
+    sum(s.saleamount) as TotalSales,
+    avg(s.saleamount) as AvgSales,
+    min(s.saleamount) as MinSales,
+    max(s.saleamount) as MaxSales
+    
+from 
+    sales_all_years s
+where
+    lower(ordermonthyear) != 'ordermonthyear'
+group by
+    ordermonthyear,
+    productcategory
+order by
+    ordermonthyear desc
+
+-- Ex: Having
+select 
+    productcategory,
+    productsubcategory,
+    productkey,
+    sum(saleamount) as TotalSales
+from sales_all_years
+where
+    Yr=2009
+group by 
+    productcategory, 
+    productsubcategory, 
+    productkey
+having
+    sum(saleamount) > 100000
+limit 1000;
+
+
+-- Grouping Set
+select
+    ordermonthyear as OrderMonth,
+    productcategory as Category,
+    sum(saleamount) as TotalSales
+from
+    sales_all_years
+where
+    lower(ordermonthyear) != 'ordermonthyear'
+group by
+    ordermonthyear,
+    productcategory
+-- enhancing
+grouping sets
+    (ordermonthyear, productcategory)
+
+-- WITH CUBE returns subtotals of all possible comibnations. Be careful with large datasets!
+-- This is nice if you're unsure of the aggregation level you'll want but certainly can cause slowness
+select
+    ordermonthyear as OrderMonth,
+    productcategory as Category,
+    GROUPING__ID as Grp,
+    sum(saleamount) as TotalSales
+from
+    sales_all_years
+where
+    lower(ordermonthyear) != 'ordermonthyear'
+group by
+    ordermonthyear,
+    productcategory
+-- enhancing
+with cube
+
+
+-- WITH ROLLUP is similar in that it creates multiple aggregation levels, but as a hierarchy instead
+-- Same query, except this time the grouping levels are defined as a hierarchy
+select
+    ordermonthyear as OrderMonth,
+    productcategory as Category,
+    GROUPING__ID as Grp,
+    sum(saleamount) as TotalSales
+from
+    sales_all_years
+where
+    lower(ordermonthyear) != 'ordermonthyear'
+group by
+    ordermonthyear,
+    productcategory
+-- enhancing
+with rollup

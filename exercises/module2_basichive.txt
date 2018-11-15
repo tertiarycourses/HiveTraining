@@ -1,0 +1,64 @@
+# Module 2 Basic Hive Operations
+
+-- create database
+CREATE DATABASE userdb
+
+SHOW DATABASES
+
+DROP DATABASE userdb
+
+USE userdb
+
+-- create table
+CREATE TABLE employee ( 
+eid int, 
+name String,
+salary String, 
+destination String)
+
+
+-- load data to empty table
+CREATE TABLE clients (
+    Name                string,
+    Symbol              string,
+    LastSale            double,
+    MarketCapLabel      string,
+    MarketCapAmount     bigint,
+    IPOyear             int,
+    Sector              string,
+    industry            string,
+    SummaryQuote        string
+)
+row format serde 'com.bizo.hive.serde.csv.CSVSerde'
+stored as textfile;
+
+-- alter table
+ALTER TABLE employee RENAME TO employees
+ALTER TABLE employees ADD COLUMNS (leave String)
+
+
+
+-- table partitioning
+
+create table sales_all_years (RowID smallint, OrderID int, OrderDate date, OrderMonthYear date, Quantity int, Quote float, DiscountPct float, Rate float, SaleAmount float, CustomerName string, CompanyName string, Sector string, Industry string, City string, ZipCode string, State string, Region string, ProjectCompleteDate date, DaystoComplete int, ProductKey string, ProductCategory string, ProductSubCategory string, Consultant string, Manager string, HourlyWage float, RowCount int, WageMargin float)
+partitioned by (yr int)
+row format serde 'com.bizo.hive.serde.csv.CSVSerde'
+stored as textfile;
+
+-- add the partitions
+alter table sales_all_years
+add partition (yr=2009)
+location '2009/';
+
+alter table sales_all_years
+add partition (yr=2010)
+location '2010/';
+
+alter table sales_all_years
+add partition (yr=2011)
+location '2011/';
+
+alter table sales_all_years
+add partition (yr=2012)
+location '2012/';
+

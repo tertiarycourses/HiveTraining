@@ -16,6 +16,10 @@ name String,
 salary String, 
 destination String)
 
+-- CSV Serde
+
+ALTER TABLE sales_comma 
+SET SERDE 'com.bizo.hive.serde.csv.CSVSerde'
 
 -- load data to empty table
 CREATE TABLE clients (

@@ -21,7 +21,7 @@ select
     c.name, 
     c.ipoyear, 
     c.symbol,
-    count(distinct s.orderid) as OrderCount,
+    count(distinct s.orderid) OrderCount,
     sum(s.saleamount) as TotalSales
 from sales_all_years s
 join clients c on s.companyname = c.name

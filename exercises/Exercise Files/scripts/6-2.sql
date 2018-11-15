@@ -3,7 +3,7 @@ select *
 from sales_all_years s
 where exists(
     select *
-    from clients v
+    from vip_clients v
     where s.companyname = v.name);
 
 -- get info about vip customers only
@@ -13,7 +13,7 @@ select
     count(distinct s.orderid) OrderCount,
     sum(s.saleamount) as TotalSales
 from sales_all_years s
-left semi join clients v on (s.companyname = v.name) 
+left semi join vip_clients v on (s.companyname = v.name) 
 group by
     s.companyname,
     s.productcategory
